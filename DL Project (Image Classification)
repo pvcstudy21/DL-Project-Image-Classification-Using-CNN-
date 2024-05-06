@@ -70,3 +70,56 @@ cnn.fit(x_train, y_train, epochs=20)
 # Evaluate the model
 
 print(cnn.evaluate(x_test, y_test))
+
+# Function for Classification
+
+def classify_animal_image(model, image_path):
+    # Load the image
+    img = image.load_img(image_path, target_size=(32, 32))
+
+    # Convert the image to a numpy array
+    img_array = image.img_to_array(img)
+
+    # Expand dimensions to match the model input shape
+    img_array = np.expand_dims(img_array, axis=0)
+
+    # Preprocess the image
+    img_array = img_array / 255.0
+
+    # Predict the class probabilities
+    predictions = model.predict(img_array)
+
+    # Get the predicted class index
+    predicted_class_index = np.argmax(predictions)
+
+    # Map the class index to the corresponding animal class
+    animal_classes = ["bird", "cat", "deer", "dog", "frog"]
+    predicted_animal_class = animal_classes[predicted_class_index]
+
+    # Display the image
+    plt.imshow(img)
+    plt.axis('off')
+    plt.show()
+
+    return predicted_animal_class, predictions[0][predicted_class_index]
+
+# Example usage:
+
+# Path to the input image
+image_path = r"C:\Users\Dell\Downloads\pexels-photo-1170986.webp"
+
+# Classify the input image
+predicted_class, confidence = classify_animal_image(cnn, image_path)
+
+print("Predicted class:", predicted_class)
+print("Confidence:", confidence)
+
+# Path to the input image
+
+image_path = r"C:\Users\Dell\Downloads\dog-puppy-on-garden-royalty-free-image-1586966191.jpg"
+
+# Classify the input image
+predicted_class, confidence = classify_animal_image(cnn, image_path)
+
+print("Predicted class:", predicted_class)
+print("Confidence:", confidence)
