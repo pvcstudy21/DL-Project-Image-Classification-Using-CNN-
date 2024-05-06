@@ -1,0 +1,46 @@
+# Importing all the libraries
+
+import tensorflow as tf
+from tensorflow.keras import datasets, layers, models
+from tensorflow.keras.preprocessing import image
+import numpy as np
+import matplotlib.pyplot as plt
+
+# loading the cifar10 dataset
+
+(x_train, y_train), (x_test, y_test) = datasets.cifar10.load_data()
+
+# converting data into one dimentional array
+
+y_train = y_train.reshape(-1,)
+print(y_train[:5])
+
+y_test = y_test.reshape(-1,)
+
+# Only keep samples that represent animals (classes 2, 3, 4, 5, 6)
+
+animal_indices_train = np.where((y_train >= 2) & (y_train <= 6))[0]
+x_train = x_train[animal_indices_train]
+y_train = y_train[animal_indices_train] - 2  # Adjust labels to be in range [0, 4]
+
+animal_indices_test = np.where((y_test >= 2) & (y_test <= 6))[0]
+x_test = x_test[animal_indices_test]
+y_test = y_test[animal_indices_test] - 2  # Adjust labels to be in range [0, 4]
+
+# defining target classes
+
+classes = ["bird", "cat", "deer", "dog", "frog"]
+
+def plot_sample(x, y, index):
+    plt.figure(figsize=(15, 2))
+    plt.imshow(x[index])
+    plt.xlabel(classes[y[index]])
+
+print(plot_sample(x_train, y_train, 70))
+
+print(plot_sample(x_train, y_train, 100))
+
+# Scaling the pixel values to a range between 0 and 1
+
+x_train = x_train / 255.0
+x_test = x_test / 255.0
